@@ -16,7 +16,8 @@ public:
   i2cLCD() { voltage_ = 5; };
   i2cLCD(unsigned char voltage) { voltage_ = voltage; };
   /**
-   *
+   * @brief show a character in a LCD
+   * @param t_data displayed data
    */
   void writeData(unsigned char t_data) {
     Wire.beginTransmission(LCD_ADRS);
@@ -26,6 +27,10 @@ public:
     delay(1);
   }
 
+  /**
+   * @brief send command id to a microchip on LCD
+   * @param t_command sent command
+   */
   void writeCommand(unsigned char t_command) {
     Wire.beginTransmission(LCD_ADRS);
     Wire.write(0x00);
@@ -33,6 +38,7 @@ public:
     Wire.endTransmission();
     delay(10);
   }
+
   /**
    * @brief initialize display
    */
@@ -64,7 +70,7 @@ public:
   }
 
   /**
-   * @brief vlear display
+   * @brief clear display
    */
   void clear() {
     writeCommand(0x01);
