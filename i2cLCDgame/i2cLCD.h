@@ -90,6 +90,19 @@ public:
     }
     delay(20);
   }
+  /**
+   * @brief fill the display with one charactor
+   * @param c filling charactor
+   */
+  void fill(char c){
+    for(int j = 0; j < 2; ++j){
+      move(j,0);
+      for(int i=0;i<16;++i){
+        writeData(c);
+      }
+    }
+    
+  }
 };
 
 #endif

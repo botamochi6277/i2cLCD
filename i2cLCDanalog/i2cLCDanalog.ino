@@ -44,7 +44,7 @@ void loop() {
   average = total / numReadings;
 
   if(cnt%10){
-    mylcd.clear();
+    mylcd.move(0,0);
     sprintf(s, "A0 avr =   %04d", average);
     for(int i=0;i<16;i++){
       mylcd.writeData(s[i]);

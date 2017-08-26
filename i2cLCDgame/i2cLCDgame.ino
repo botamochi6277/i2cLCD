@@ -7,6 +7,7 @@ int const BUTTON_PIN = 2;
 
 int playerPos[2];// player position, x-y
 int obstaclePos[10][2];// obstacle position, first index: obstacleId,second index: positon
+char pixels[16][2];
 
 int numObs = 0;
 unsigned long cnt = 0;
@@ -72,18 +73,33 @@ void loop() {
     }
 
     //display
-    mylcd.clear();
-    for(int i=0;i < numObs;++i){
-      if(obstaclePos[i][0] > -1){
-        mylcd.move(obstaclePos[i][1],obstaclePos[i][0]);
-        mylcd.writeData('*');
+
+    // fill pixels with ` `(space)
+    for(int x = 0;x<16;++x){
+      for(int y = 0; y<2 ;++y){
+        pixels[x][y] = ' ';
       }
     }
-    mylcd.move(playerPos[1],playerPos[0]);
+
+    for(int i=0;i < numObs;++i){
+      if(obstaclePos[i][0] > -1){
+        pixels[obstaclePos[i][0]][obstaclePos[i][1]] = '*';
+      }
+    }
+
     if(!isCrush){
-      mylcd.writeData('>');
+      pixels[playerPos[0]][playerPos[1]] = '>';
     }else{
-      mylcd.writeData('X');
+      pixels[playerPos[0]][playerPos[1]] = 'X';
+    }
+
+    //    write display
+
+    for(int y = 0; y<2 ;++y){
+      mylcd.move(y,0);
+      for(int x = 0;x<16;++x){
+        mylcd.writeData(pixels[x][y]);
+      }
     }
 
     cnt++;
@@ -98,7 +114,7 @@ void loop() {
 
   // Game over
   delay(3000);
-  mylcd.clear();
+  mylcd.fill(' ');
   mylcd.move(0,0);
   char msg[] = "** GAME  OVER **";
   for(int i=0;i<16;i++){
@@ -114,5 +130,13 @@ void loop() {
   isCrush = false;
   cnt = 0;
   numObs = 0;
-  delay(10000);
+
+  for(int i=0;i < numObs;++i){
+    obstaclePos[i][0] = 0;
+    obstaclePos[i][1] = 0;
+  }
+  while(digitalRead(BUTTON_PIN)){
+    delay(30);
+  }
+
 }
